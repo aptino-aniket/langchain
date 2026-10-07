@@ -1,21 +1,33 @@
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-model=ChatHuggingFace(llm=HuggingFaceEndpoint(
-    repo_id="ibm-granite/granite-4.2-3b",
-    huggingfacehub_api_token=os.getenv("HUGGINGFACE_API_KEY"),
-    provider="deepinfra"
-))
 
-chat_history=[]
+model = ChatGoogleGenerativeAI(
+    api_key=os.getenv("GEMINI_API_KEY"),
+    model="gemini-3.5-flash-lite",
+)
+
+chat_history = [
+    SystemMessage(content="You are a helpful assistant.")
+]
+
 while True:
     user_input = input("You: ")
-    chat_history.append({"role": "user", "content": user_input})
+
     if user_input.lower() == "exit":
         break
 
+    chat_history.append(
+        HumanMessage(content=user_input)
+    )
+
     result = model.invoke(chat_history)
-    chat_history.append({"role": "assistant", "content": result.content})
+
+    chat_history.append(
+        AIMessage(content=result.content)
+    )
+
     print("Model:", result.content)

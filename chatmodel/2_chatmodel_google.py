@@ -1,13 +1,25 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-llm = ChatGoogleGenerativeAI(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    model="gemini-3.8-flash", )
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
-result=llm.invoke("Hello, how are you?")
+print("1. Client created")
 
-print(result)
+response = client.models.generate_content(
+    model="gemini-3.8-flash",
+    contents="Say hello in one sentence.",
+    config=types.GenerateContentConfig(
+        automatic_function_calling=types.AutomaticFunctionCallingConfig(
+            disable=True
+        )
+    )
+)
+
+print("2. Response received")
+print(response.text)

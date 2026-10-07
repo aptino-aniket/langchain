@@ -1,0 +1,7 @@
+from langchain_openai import OpenAIEmbeddings
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+embeddings = OpenAIEmbeddings(openai_api_key=os.environ.get("APINEX_API_KEY"))

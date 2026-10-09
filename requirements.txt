@@ -21,6 +21,9 @@ huggingface-hub
 # Environment Variable Management
 python-dotenv
 
+# HTML parsing for web document loaders
+beautifulsoup4
+
 # Streamlit UI
 streamlit
 
